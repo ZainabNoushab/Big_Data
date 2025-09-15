@@ -309,16 +309,6 @@ else:
             ax.set_xlabel("PC1"); ax.set_ylabel("PC2"); ax.legend()
             st.pyplot(fig)
 
-else:
-    st.info("Please upload a dataset to begin.")
-    st.stop()
-
-st.header("Upload dataset")
-uploaded_file = st.file_uploader("Upload CSV / Excel / JSON", type=["csv", "xls", "xlsx", "json"])
-
-if uploaded_file is not None:
-    # ... load df, train, synthesize, stats, visuals ...
-
     # -------------------------------
     # Report & downloads
     # -------------------------------
@@ -357,10 +347,6 @@ Advanced statistics:
         pass
 
     st.success("Done — downloads are ready above.")
-
-else:
-    st.info("Please upload a dataset to begin.")
-    st.stop()
 
 with open("app.py", "w") as f:
     f.write(code)
