@@ -90,10 +90,6 @@ with col_b:
     df = df.copy()
     # continue with detect_type(), imputation, training, etc.
 
-else:
-    st.info("Please upload a dataset to begin.")
-    st.stop()
-
 st.header("Train / Synthesize")
 
 if st.button("Start synthesis"):
