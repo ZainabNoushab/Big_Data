@@ -68,12 +68,12 @@ def advanced_stats(real, synth, cardinality_threshold=50):
 # Streamlit App
 # ===============================
 st.set_page_config(layout="wide", page_title="Data Synthesizer")
-st.title("📊 Data Synthesizer App")
+st.title("Data Synthesizer App")
 
 # -------------------------------
 # Upload dataset
 # -------------------------------
-st.header("1️⃣ Upload dataset")
+st.header("Upload dataset")
 uploaded_file = st.file_uploader("Upload CSV / Excel / JSON", type=["csv", "xls", "xlsx", "json"], key="main_upload")
 
 if uploaded_file is not None:
@@ -87,19 +87,19 @@ if uploaded_file is not None:
         else:
             st.error("❌ Unsupported file type.")
             st.stop()
-        st.success(f"✅ Loaded dataset: {uploaded_file.name} — shape: {df.shape}")
+        st.success(f"Loaded dataset: {uploaded_file.name} — shape: {df.shape}")
         st.dataframe(df.head())
     except Exception as e:
         st.error(f"Error loading file: {e}")
         st.stop()
 else:
-    st.info("👉 Please upload a dataset to begin.")
+    st.info("Please upload a dataset to begin.")
     st.stop()
 
 # -------------------------------
 # Options
 # -------------------------------
-st.header("2️⃣ Options")
+st.header("Options")
 col1, col2 = st.columns([2, 1])
 with col1:
     model_choice = st.selectbox("Model", ["CTGAN", "Statistical (Gaussian Copula)"])
@@ -116,7 +116,7 @@ with col2:
 # -------------------------------
 # Train / Synthesize
 # -------------------------------
-st.header("3️⃣ Train / Synthesize")
+st.header("Train / Synthesize")
 if st.button("Start synthesis"):
     metadata = SingleTableMetadata()
     metadata.detect_from_dataframe(df)
@@ -175,7 +175,7 @@ if st.button("Start synthesis"):
     # -------------------------------
     # Validation + Advanced Stats
     # -------------------------------
-    st.header("4️⃣ Validation & Advanced statistics")
+    st.header("Validation & Advanced statistics")
     with st.spinner("Running SDV evaluation and diagnostics..."):
         quality_report = evaluate_quality(df, best_synthetic, metadata)
         diagnostic_report = run_diagnostic(df, best_synthetic, metadata)
@@ -186,17 +186,17 @@ if st.button("Start synthesis"):
     # -------------------------------
     # Visualizations
     # -------------------------------
-    st.header("5️⃣ Visualizations")
+    st.header("Visualizations")
 
     # 📊 Statistical Summary
-    st.subheader("📊 Statistical Summary: Original vs Synthetic")
+    st.subheader("Statistical Summary: Original vs Synthetic")
     real_summary = df.describe(include="all").T
     synth_summary = best_synthetic.describe(include="all").T
     summary = real_summary.join(synth_summary, lsuffix="_Real", rsuffix="_Synthetic")
     st.dataframe(summary)
 
     # 📈 Distribution Plots
-    st.subheader("📈 Distribution comparison (numeric)")
+    st.subheader("Distribution comparison (numeric)")
     num_cols = df.select_dtypes(include=np.number).columns.tolist()
     for col in num_cols:
         fig, ax = plt.subplots(figsize=(6, 4))
@@ -227,7 +227,7 @@ if st.button("Start synthesis"):
     # -------------------------------
     # Report & downloads
     # -------------------------------
-    st.header("6️⃣ Report & downloads")
+    st.header("Report & downloads")
     diagnostic_text = str(diagnostic_report) if diagnostic_report is not None else "N/A"
     report_text = f"""Data Synthesis Report
 Model: {model_choice}
@@ -245,8 +245,9 @@ Advanced statistics:
 """
     synthetic_csv = best_synthetic.to_csv(index=False).encode("utf-8")
     stats_csv = stats_df.to_csv(index=False).encode("utf-8")
-    st.download_button("⬇️ Download synthetic dataset (CSV)", synthetic_csv, "synthetic.csv", "text/csv")
-    st.download_button("⬇️ Download advanced statistics (CSV)", stats_csv, "advanced_stats.csv", "text/csv")
-    st.download_button("⬇️ Download synthesis report (TXT)", report_text.encode("utf-8"), "synthesis_report.txt", "text/plain")
+    st.download_button("Download synthetic dataset (CSV)", synthetic_csv, "synthetic.csv", "text/csv")
+    st.download_button("Download advanced statistics (CSV)", stats_csv, "advanced_stats.csv", "text/csv")
+    st.download_button("Download synthesis report (TXT)", report_text.encode("utf-8"), "synthesis_report.txt", "text/plain")
 
-    st.success("✅ Done — downloads are ready above.")
+    st.success("Done — downloads are ready above.")
+
