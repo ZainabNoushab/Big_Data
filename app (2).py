@@ -25,10 +25,10 @@ import joblib, datetime, warnings
 warnings.filterwarnings("ignore")
 sns.set_style("whitegrid")
 
-st.set_page_config(layout="wide", page_title="Data Synthesizer Pro")
-st.title("📊 Data Synthesizer Pro (CTGAN + Statistical Models)")
+st.set_page_config(layout="wide", page_title="Data Synthesizer")
+st.title("Data Synthesizer")
 
-st.header("1️⃣ Upload dataset")
+st.header("Upload dataset")
 uploaded_file = st.file_uploader(
     "Upload CSV / Excel / JSON",
     type=["csv", "xls", "xlsx", "json"]
@@ -48,17 +48,17 @@ if uploaded_file is not None:
             st.stop()
 
         # ✅ Safe: only runs if file exists
-        st.success(f"✅ Loaded dataset: {uploaded_file.name} — shape: {df.shape}")
+        st.success(f"Loaded dataset: {uploaded_file.name} — shape: {df.shape}")
         st.dataframe(df.head())
 
     except Exception as e:
-        st.error(f"❌ Error loading file: {e}")
+        st.error(f"Error loading file: {e}")
         st.stop()
 else:
-    st.info("👉 Please upload a dataset to begin.")
+    st.info("Please upload a dataset to begin.")
     st.stop()
 
-st.header("2️⃣ Options")
+st.header("Options")
 col1, col2 = st.columns([2, 1])
 with col1:
     model_choice = st.selectbox("Model", ["CTGAN", "Statistical (Gaussian Copula)"])
@@ -81,7 +81,7 @@ with col_b:
     group_high_cardinality = st.checkbox("Group rare categories to 'other' for high-cardinality text", value=True)
     cardinality_threshold = st.number_input("High-cardinality threshold", value=50, min_value=5)
 
-st.header("1️⃣ Upload dataset")
+st.header("Upload dataset")
 uploaded_file = st.file_uploader("Upload CSV / Excel / JSON", type=["csv", "xls", "xlsx", "json"])
 
 if uploaded_file is not None:
@@ -94,28 +94,28 @@ if uploaded_file is not None:
         elif uploaded_file.name.endswith(".json"):
             df = pd.read_json(uploaded_file)
         else:
-            st.error("❌ Unsupported file type.")
+            st.error("Unsupported file type.")
             st.stop()
 
-        st.success(f"✅ Loaded dataset: {uploaded_file.name} — shape: {df.shape}")
+        st.success(f"Loaded dataset: {uploaded_file.name} — shape: {df.shape}")
         st.dataframe(df.head())
 
     except Exception as e:
-        st.error(f"❌ Error loading file: {e}")
+        st.error(f"Error loading file: {e}")
         st.stop()
 
     # -------------------------------
     # 🚀 Everything after this point needs `df`
     # -------------------------------
-    st.header("3️⃣ Preprocessing")
+    st.header("Preprocessing")
     df = df.copy()
     # continue with detect_type(), imputation, training, etc.
 
 else:
-    st.info("👉 Please upload a dataset to begin.")
+    st.info("Please upload a dataset to begin.")
     st.stop()
 
-st.header("4️⃣ Train / Synthesize")
+st.header("Train / Synthesize")
 
 if st.button("Start synthesis"):
     metadata = SingleTableMetadata()
@@ -179,7 +179,7 @@ if st.button("Start synthesis"):
      # -------------------------------
 # Validation + advanced stats
 # -------------------------------
-    st.header("5️⃣ Validation & Advanced statistics")
+    st.header("Validation & Advanced statistics")
 
     with st.spinner("Running SDV evaluation and diagnostics..."):
         quality_report = evaluate_quality(df, best_synthetic, metadata)
@@ -192,10 +192,10 @@ if st.button("Start synthesis"):
     st.dataframe(stats_df)
 
 else:
-    st.info("👉 Please upload a dataset to begin.")
+    st.info("Please upload a dataset to begin.")
     st.stop()
 
-st.header("1️⃣ Upload dataset")
+st.header("Upload dataset")
 uploaded_file = st.file_uploader("Upload CSV / Excel / JSON", type=["csv", "xls", "xlsx", "json"])
 
 if uploaded_file is not None:
@@ -212,7 +212,7 @@ if uploaded_file is not None:
         st.error("Unsupported file type.")
         st.stop()
 
-    st.success(f"✅ Loaded dataset: {uploaded_file.name} — shape: {df.shape}")
+    st.success(f"Loaded dataset: {uploaded_file.name} — shape: {df.shape}")
     st.dataframe(df.head())
 
     # -------------------------------
@@ -330,7 +330,7 @@ if uploaded_file is not None:
     # -------------------------------
     # Visualizations
     # -------------------------------
-    st.header("6️⃣ Visualizations")
+    st.header("Visualizations")
 
     num_cols = df.select_dtypes(include=np.number).columns.tolist()
     if num_cols:
@@ -352,10 +352,10 @@ if uploaded_file is not None:
             st.pyplot(fig)
 
 else:
-    st.info("👉 Please upload a dataset to begin.")
+    st.info("Please upload a dataset to begin.")
     st.stop()
 
-st.header("1️⃣ Upload dataset")
+st.header("Upload dataset")
 uploaded_file = st.file_uploader("Upload CSV / Excel / JSON", type=["csv", "xls", "xlsx", "json"])
 
 if uploaded_file is not None:
@@ -364,7 +364,7 @@ if uploaded_file is not None:
     # -------------------------------
     # Report & downloads
     # -------------------------------
-    st.header("7️⃣ Report & downloads")
+    st.header("Report & downloads")
 
     diagnostic_text = str(diagnostic_report) if diagnostic_report is not None else "N/A"
     report_text = f"""Data Synthesis Report
@@ -385,9 +385,9 @@ Advanced statistics:
     # In-memory CSVs for download
     synthetic_csv = best_synthetic.to_csv(index=False).encode("utf-8")
     stats_csv = stats_df.to_csv(index=False).encode("utf-8")
-    st.download_button("⬇️ Download synthetic dataset (CSV)", synthetic_csv, "synthetic.csv", "text/csv")
-    st.download_button("⬇️ Download advanced statistics (CSV)", stats_csv, "advanced_stats.csv", "text/csv")
-    st.download_button("⬇️ Download synthesis report (TXT)", report_text.encode("utf-8"), "synthesis_report.txt", "text/plain")
+    st.download_button("Download synthetic dataset (CSV)", synthetic_csv, "synthetic.csv", "text/csv")
+    st.download_button("Download advanced statistics (CSV)", stats_csv, "advanced_stats.csv", "text/csv")
+    st.download_button("Download synthesis report (TXT)", report_text.encode("utf-8"), "synthesis_report.txt", "text/plain")
 
     # Also save files locally
     try:
@@ -398,13 +398,13 @@ Advanced statistics:
     except Exception:
         pass
 
-    st.success("✅ Done — downloads are ready above.")
+    st.success("Done — downloads are ready above.")
 
 else:
-    st.info("👉 Please upload a dataset to begin.")
+    st.info("Please upload a dataset to begin.")
     st.stop()
 
 with open("app.py", "w") as f:
     f.write(code)
 
-print("✅ app.py saved successfully!")
+print("app.py saved successfully!")
