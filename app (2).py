@@ -81,28 +81,7 @@ with col_b:
     group_high_cardinality = st.checkbox("Group rare categories to 'other' for high-cardinality text", value=True)
     cardinality_threshold = st.number_input("High-cardinality threshold", value=50, min_value=5)
 
-st.header("Upload dataset")
-uploaded_file = st.file_uploader("Upload CSV / Excel / JSON", type=["csv", "xls", "xlsx", "json"])
 
-if uploaded_file is not None:
-    # Load dataset
-    try:
-        if uploaded_file.name.endswith(".csv"):
-            df = pd.read_csv(uploaded_file)
-        elif uploaded_file.name.endswith((".xls", ".xlsx")):
-            df = pd.read_excel(uploaded_file)
-        elif uploaded_file.name.endswith(".json"):
-            df = pd.read_json(uploaded_file)
-        else:
-            st.error("Unsupported file type.")
-            st.stop()
-
-        st.success(f"Loaded dataset: {uploaded_file.name} — shape: {df.shape}")
-        st.dataframe(df.head())
-
-    except Exception as e:
-        st.error(f"Error loading file: {e}")
-        st.stop()
 
     # -------------------------------
     # 🚀 Everything after this point needs `df`
@@ -195,25 +174,8 @@ else:
     st.info("Please upload a dataset to begin.")
     st.stop()
 
-st.header("Upload dataset")
-uploaded_file = st.file_uploader("Upload CSV / Excel / JSON", type=["csv", "xls", "xlsx", "json"])
 
-if uploaded_file is not None:
-    # -------------------------------
-    # Load dataset
-    # -------------------------------
-    if uploaded_file.name.endswith(".csv"):
-        df = pd.read_csv(uploaded_file)
-    elif uploaded_file.name.endswith((".xls", ".xlsx")):
-        df = pd.read_excel(uploaded_file)
-    elif uploaded_file.name.endswith(".json"):
-        df = pd.read_json(uploaded_file)
-    else:
-        st.error("Unsupported file type.")
-        st.stop()
-
-    st.success(f"Loaded dataset: {uploaded_file.name} — shape: {df.shape}")
-    st.dataframe(df.head())
+   
 
     # -------------------------------
     # Train / synthesize model here
